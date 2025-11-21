@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  credit-agent:
+    build: .
+    container_name: plataforma-creditos-ai
+    restart: unless-stopped
+
+    # Variables de entorno
+    env_file:
+      - .env
+
+    # Volúmenes para persistir certificados y logs
+    volumes:
+      - ./security:/app/security:ro  # Certificados (solo lectura)
+      - ./logs:/app/logs            # Logs persistentes
+      - ./data:/app/data            # Datos adicionales si es necesario
+
+    # Comando por defecto (puede ser sobreescrito)
+    command: ["python", "main.py", "test_data.json"]
+
+    # Redes
+    networks:
+      - credit-network
+
+    # Logging
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+    # Healthcheck (opcional)
+    healthcheck:
+      test: ["CMD", "python", "-c", "import sys; sys.exit(0)"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Servicio opcional para API REST (futuro)
+  # api-server:
+  #   build: .
+  #   container_name: credit-api-server
+  #   ports:
+  #     - "8000:8000"
+  #   command: ["uvicorn", "api.server:app", "--host", "0.0.0.0", "--port", "8000"]
+  #   depends_on:
+  #     - credit-agent
+  #   networks:
+  #     - credit-network
+
+networks:
+  credit-network:
+    driver: bridge
+
+volumes:
+  security_data:
+  logs_data:
