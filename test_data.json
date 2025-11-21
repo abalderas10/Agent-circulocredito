@@ -1,0 +1,15 @@
+{
+  "nombre": "Juan Pérez García",
+  "curp": "PEGJ900101HDFRRL09",
+  "rfc": "PEGJ900101ABC",
+  "email": "juan@email.com",
+  "telefono": "+5215551234567",
+  "cuenta_bancaria": "0123456789012345678",
+  "banco": "BBVA Bancomer",
+  "empleador": "Empresa S.A.",
+  "puesto": "Gerente",
+  "antiguedad_meses": 24,
+  "ingresos_mensuales": 25000,
+  "monto_solicitado": 100000,
+  "plazo_meses": 24
+}

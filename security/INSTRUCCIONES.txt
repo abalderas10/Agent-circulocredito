@@ -1,0 +1,12 @@
+INSTRUCCIONES PARA CONFIGURAR CERTIFICADOS EN CIRCULO DE CREDITO
+
+1. Ve a: https://developer.circulodecredito.com.mx/user/apps
+2. Selecciona tu aplicacion: plataforma-creditos-ai
+3. Ve a la seccion: Certificados
+4. Sube el archivo: certificate.pem (generado automaticamente)
+5. Descarga el certificado de Circulo de Credito
+6. Guardalo como: cdc_cert.pem en esta carpeta
+7. El agente estara listo para funcionar!
+
+NOTA: El certificado generado es auto-firmado para testing.
+Para produccion, usa una Autoridad Certificadora reconocida.
