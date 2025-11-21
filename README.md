@@ -31,6 +31,37 @@ Este agente IA evalúa solicitudes de crédito de personas físicas mexicanas si
 - ✅ **Loan Amount Estimator**: Cálculo de monto máximo
 - ✅ **Reporte Consolidado**: Historial crediticio completo
 
+## 🐳 DESPLIEGUE CON DOCKER (RECOMENDADO)
+
+### Opción Rápida con Docker:
+
+```bash
+# 1. Clonar repositorio
+git clone https://github.com/abalderas10/Agent-circulocredito.git
+cd Agent-circulocredito
+
+# 2. Configurar variables de entorno
+cp .env.example .env
+# Editar .env con tus credenciales reales
+
+# 3. Generar certificados
+./run_docker.sh build
+./run_docker.sh interactive
+
+# Dentro del contenedor, ejecutar:
+python setup_security.py
+
+# Salir del contenedor y continuar
+
+# 4. Subir certificado a Círculo de Crédito
+# Seguir instrucciones en security/INSTRUCCIONES.txt
+
+# 5. Probar el sistema
+./run_docker.sh test
+```
+
+### Opción Manual (Desarrollo):
+
 ## 🚀 GUÍA COMPLETA DE IMPLEMENTACIÓN
 
 ### PASO 1: GENERAR CERTIFICADOS ECDSA P-384
@@ -775,18 +806,85 @@ DECISION_RULES = {
 
 ## 🚀 DEPLOYMENT
 
-### Docker
-```dockerfile
-FROM python:3.9-slim
+### Docker (Recomendado)
 
-WORKDIR /app
-COPY requirements.txt .
-RUN pip install -r requirements.txt
+La aplicación incluye configuración completa de Docker para facilitar el deployment:
 
-COPY . .
-EXPOSE 8000
+#### Archivos Docker incluidos:
+- `Dockerfile` - Imagen de la aplicación
+- `docker-compose.yml` - Orquestación de servicios
+- `.dockerignore` - Optimización del build
+- `run_docker.sh` - Script de automatización
 
-CMD ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8000"]
+#### Comandos Docker:
+
+```bash
+# Construir imagen
+./run_docker.sh build
+
+# Ejecutar pruebas
+./run_docker.sh test
+
+# Ejecutar modo interactivo
+./run_docker.sh interactive
+
+# Ver logs
+./run_docker.sh logs
+
+# Limpiar
+./run_docker.sh clean
+```
+
+#### Variables de Entorno en Docker:
+```yaml
+# En docker-compose.yml
+env_file:
+  - .env
+
+# Asegúrate de que .env tenga:
+CIRCULO_CREDITO_API_KEY=tu_api_key_real
+PRIVATE_KEY_PATH=./security/pri_key.pem
+CDC_CERT_PATH=./security/cdc_cert.pem
+```
+
+### VPS Deployment
+
+Una vez probado en Docker local:
+
+#### 1. Preparar VPS:
+```bash
+# En tu VPS (Ubuntu/Debian)
+sudo apt update
+sudo apt install docker.io docker-compose git
+sudo systemctl start docker
+sudo systemctl enable docker
+```
+
+#### 2. Desplegar:
+```bash
+# Clonar repositorio
+git clone https://github.com/abalderas10/Agent-circulocredito.git
+cd Agent-circulocredito
+
+# Configurar .env con credenciales reales
+cp .env.example .env
+nano .env  # Editar con tus valores
+
+# Asegurar que los certificados estén en ./security/
+# pri_key.pem, certificate.pem, cdc_cert.pem
+
+# Ejecutar
+./run_docker.sh build
+./run_docker.sh test
+```
+
+#### 3. Configurar monitoreo (opcional):
+```bash
+# Instalar monitoring básico
+docker-compose -f docker-compose.yml -f docker-compose.monitoring.yml up -d
+
+# Ver logs en tiempo real
+docker-compose logs -f
 ```
 
 ### Producción
@@ -813,10 +911,11 @@ CIRCULO_CREDITO["base_url"] = "https://services.circulodecredito.com.mx/v3/"
 
 ## 📞 SOPORTE
 
-- 📧 Email: soporte@plataforma-creditos-ai.com
+- 📧 Email: alberto@abdev.click
 - 📱 WhatsApp: +52 55 1234 5678
-- 📚 Docs: https://docs.plataforma-creditos-ai.com
-- 🐛 Issues: https://github.com/tu-usuario/plataforma-creditos-ai/issues
+- 🏢 Empresa: ABDev
+- 📚 Docs: https://github.com/abalderas10/Agent-circulocredito#readme
+- 🐛 Issues: https://github.com/abalderas10/Agent-circulocredito/issues
 
 ## 📄 LICENCIA
 
